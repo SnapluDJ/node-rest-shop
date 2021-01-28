@@ -9,9 +9,9 @@ const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
 
 mongoose.connect(
-  "mongodb+srv://dongjie:" +
+  "mongodb://dongjie:" +
     process.env.MONGO_ATLAS_PWD +
-    "@node-rest-shop.lecma.mongodb.net/test",
+    "@node-rest-shop-shard-00-00.lecma.mongodb.net:27017,node-rest-shop-shard-00-01.lecma.mongodb.net:27017,node-rest-shop-shard-00-02.lecma.mongodb.net:27017/test?ssl=true&replicaSet=atlas-6hr3vc-shard-0&authSource=admin&retryWrites=true&w=majority",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
