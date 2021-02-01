@@ -8,6 +8,7 @@ const Product = require("../models/product");
 router.get("/", (req, res, next) => {
   Order.find()
     .select("-__v")
+    .populate("product", "-__v")
     .exec()
     .then((docs) => {
       const response = {
@@ -47,7 +48,9 @@ router.get("/:orderId", async (req, res, next) => {
   const orderId = req.params.orderId;
 
   try {
-    const order = await Order.findById(orderId).select("-__v");
+    const order = await Order.findById(orderId)
+      .select("-__v")
+      .populate("product", "-__v");
     res.status(200).json(order);
   } catch (err) {
     res.status(500).json({ error: err });
