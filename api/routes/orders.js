@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 
 const Order = require("../models/order");
 const Product = require("../models/product");
+const checkAuth = require("../middleware/checkAuth");
 
 router.get("/", (req, res, next) => {
   Order.find()
@@ -24,7 +25,7 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", checkAuth, (req, res, next) => {
   Product.findById(req.body.productId)
     .exec()
     .then(() => {
@@ -44,7 +45,7 @@ router.post("/", (req, res, next) => {
     });
 });
 
-router.get("/:orderId", async (req, res, next) => {
+router.get("/:orderId", checkAuth, async (req, res, next) => {
   const orderId = req.params.orderId;
 
   try {
@@ -57,7 +58,7 @@ router.get("/:orderId", async (req, res, next) => {
   }
 });
 
-router.delete("/:orderId", (req, res, next) => {
+router.delete("/:orderId", checkAuth, (req, res, next) => {
   const id = req.params.orderId;
 
   Order.findByIdAndDelete(id)
