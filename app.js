@@ -9,6 +9,7 @@ const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
 const userRoutes = require("./api/routes/user");
 
+mongoose.set("useCreateIndex", true);
 mongoose
   .connect(
     "mongodb://dongjie:" +
