@@ -1,5 +1,6 @@
 {
   "env": {
-    "MONGO_ATLAS_PWD": "dongjie"
+    "MONGO_ATLAS_PWD": "dongjie",
+    "JWT_KEY": "jwt"
   }
 }

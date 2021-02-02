@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const User = require("../models/user");
 
@@ -16,25 +17,55 @@ router.post("/signup", (req, res, next) => {
         password: hash,
       });
 
-      user
-        .save()
-        .then((result) => {
-          res.status(200).json(result);
-        })
-        .catch((err) => {
-          res.status(500).json({ error: err });
-        });
-
-      // try {
-      //   const result = await user.save();
-      //   res.status(200).json(result);
-      // } catch (err) {
-      //   res.status(500).json({ error: err });
-      // }
+      try {
+        const result = await user.save();
+        res.status(200).json(result);
+      } catch (err) {
+        res.status(500).json({ error: err });
+      }
     }
   });
 });
 
-// router.post("/signin", (req, res, next) => {});
+router.post("/login", async (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({
+          message: "user not exist",
+        });
+      }
+
+      bcrypt.compare(req.body.password, user.password, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: "auth fail",
+          });
+        }
+
+        if (result) {
+          const token = jwt.sign(
+            {
+              email: user.email,
+              userId: user._id,
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: "3h",
+            }
+          );
+          return res.status(200).json({
+            message: "auth success",
+            token,
+          });
+        }
+
+        res.status(401).json({
+          message: "auth fail",
+        });
+      });
+    })
+    .catch((err) => res.status(500).json({ error: err }));
+});
 
 module.exports = router;
