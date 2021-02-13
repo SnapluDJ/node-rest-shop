@@ -8,6 +8,7 @@ const app = express();
 const productRoutes = require("./api/routes/products");
 const orderRoutes = require("./api/routes/orders");
 const userRoutes = require("./api/routes/user");
+const jobRoutes = require("./api/routes/jobs");
 
 mongoose.set("useCreateIndex", true);
 mongoose
@@ -24,8 +25,11 @@ mongoose
 
 app.use(morgan("dev"));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -47,6 +51,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/products", productRoutes);
 app.use("/orders", orderRoutes);
 app.use("/user", userRoutes);
+app.use("/jobs", jobRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("not found");
