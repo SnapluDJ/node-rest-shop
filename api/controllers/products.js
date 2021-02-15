@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const Product = require("../models/product");
 
 exports.products_get_all = (req, res, next) => {
+  console.log(req.headers.token);
+
   Product.find()
     .select("-__v")
     .exec()
@@ -10,6 +12,7 @@ exports.products_get_all = (req, res, next) => {
       const response = {
         count: docs.length,
         products: docs,
+        token: "this is token ",
       };
 
       res.status(200).json(response);
