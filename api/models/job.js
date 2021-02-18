@@ -13,6 +13,7 @@ const jobSchema = new mongoose.Schema({
   beginDate: { type: String, required: true },
   endDate: { type: String, required: true },
   questions: { type: [questionSchema], required: true },
+  expire: { type: Boolean, default: false },
 });
 
 module.exports = mongoose.model("Job", jobSchema);
